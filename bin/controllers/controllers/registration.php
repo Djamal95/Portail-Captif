@@ -3,7 +3,7 @@ namespace Epaphrodites\controllers\controllers;
         
 use Epaphrodites\controllers\switchers\MainSwitchers;
         
-final class CaptifController extends MainSwitchers
+final class registration extends MainSwitchers
 {
     private object $msg;
 
@@ -42,7 +42,7 @@ final class CaptifController extends MainSwitchers
     * @param string $html
     * @return void
     */
-     public final function showCaptifPortal(string $html): void{
+     public final function register(string $html): void{
     
         $this->views( $html, [], false );
     }

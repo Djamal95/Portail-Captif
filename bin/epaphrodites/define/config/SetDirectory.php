@@ -92,7 +92,7 @@ define('_DOMAINE_', "");
 define('_FAKE_', 'view/');
 
 // Main home page
-define('_HOME_', _FAKE_ . 'index/');
+define('_HOME_', _FAKE_ . 'inscription/');
 
 // Login home page
 define('_LOGIN_', _FAKE_ . 'login/');

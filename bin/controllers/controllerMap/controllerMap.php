@@ -9,6 +9,7 @@ use Epaphrodites\controllers\controllers\chats;
 use Epaphrodites\controllers\controllers\setting;
 use Epaphrodites\controllers\controllers\dashboard;
 use Epaphrodites\controllers\controllers\CaptifController;
+use Epaphrodites\controllers\controllers\registration;
 
 trait controllerMap
 {
@@ -31,6 +32,7 @@ trait controllerMap
     private function controllerMap(): array
     {
         return [
+			'registration' => [ new registration, 'SwitchControllers', true, 'registrationFolder', _DIR_ADMIN_TEMP_ ],
 			'CaptifController' => [ new CaptifController, 'SwitchControllers', true, 'CaptifControllerFolder', _DIR_ADMIN_TEMP_ ],
             "api" => [ new api, 'SwitchApiControllers', false ],
             "users" => [ new users, 'SwitchControllers', true, 'usersFolder', _DIR_ADMIN_TEMP_ ],
