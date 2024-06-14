@@ -114,6 +114,10 @@ body {
     box-shadow: 0 2px 0 #646464;
 }
 
+form #authentification{
+    opacity: 5%;
+    box-shadow: 0 2px 0 #646464;
+}
 @media(max-width:767px) {
     .login {
         margin: 100px auto;

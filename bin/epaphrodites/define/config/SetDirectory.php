@@ -90,9 +90,8 @@ define('_DOMAINE_', "");
 
 // Fake folders link
 define('_FAKE_', 'view/');
-
 // Main home page
-define('_HOME_', _FAKE_ . 'inscription/');
+define('_HOME_', _FAKE_ . 'index/');
 
 // Login home page
 define('_LOGIN_', _FAKE_ . 'login/');
