@@ -185,7 +185,6 @@ trait buildQueryChaines
         if ($this->values) {
             $Iquery .= " VALUES( {$this->values} )";
         }
-
         return $this->executeBuildRequest($Iquery);
     }
 

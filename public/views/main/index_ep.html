@@ -1,17 +1,60 @@
 {% extends layouts %} 
+{% from forms import input_field, submit %}
 {% block content %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="logo" align="center"><img src="{{ __img('logo.png') }}" class="img-fluid"></div>
-            <div class="col-md-12 titlesite">{{ __msg('site-title') }}</div>
-            <div class="col-md-12 epaphrodite" align="center">
-                <h1>Welcome</h1>
-                <a href="{{ __path('login') }}"> AUTHENTIFICATION <i class="icofont-long-arrow-right"></i></a>
-            </div>
-            <div class="container pt-20" align="center">
-                {{ __QRCodes('https://epaphrodite.org') }}
-                <p>Authentic</p>
-            </div>
+{% from message import alert_msg %}
+
+    <div class="login">
+        <div class="secure" align="center">
+            <img src="{{ __img('secure.svg') }}" alt="">
         </div>
+        <div class="texthead"><strong>REGISTRATION</strong></div>
+        <div class="reponses {{ class }}">{{ alert_msg( reponse , alert ) }}</div>
+        <form id="authentification" method="POST">
+
+            {{ __csrf() }} 
+
+            {{ input_field(
+                { 
+                    type : 'text' , 
+                    require : true ,
+                    name : '__name__' ,
+                    placeholder : 'Name...',
+                }
+            )}}
+                 
+            {{ input_field(
+                {
+                    require : true ,
+                    type : 'text' , 
+                    name : '__surname__',
+                    placeholder : 'Surname...',
+                }
+            )}} 
+            
+            {{ input_field(
+                {
+                    require : true ,
+                    type : 'text' , 
+                    name : '__phone__',
+                    placeholder : 'Phone number...',
+                }
+            )}} 
+
+            {{ input_field(
+                {
+                    require : true ,
+                    type : 'email' , 
+                    name : '__email__',
+                    placeholder : 'Email...',
+                }
+            )}} 
+            {{ submit(
+                {
+                    label : 'Registration',
+                    icon : 'bi bi-lock'
+                }
+            )}}
+
+        </form>
     </div>
 {% endblock %}

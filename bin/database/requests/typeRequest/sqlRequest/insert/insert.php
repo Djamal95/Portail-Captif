@@ -65,7 +65,6 @@ class insert extends InsertInsert
             return false;
         }
     }
-
     /**
      * Request to insert datas
      * @param string $Firstname
@@ -76,11 +75,12 @@ class insert extends InsertInsert
      */
     public function registerUser(string $Firstname, string $Surname, string $phone,string $email)
     {
-        $this->table('table')
-            ->insert(' Firstname , Surname , phone , email ')
-            ->values(' ? , ? , ? , ? ')
+        $result = $this->table('users')
+            ->insert('Firstname, Surname, phone, email')
+            ->values('?, ?, ?, ?')
             ->param([$Firstname, $Surname, $phone, $email])
+            ->sdb(1)
             ->IQuery();
-        return true;
+        return $result;
     }
 }
