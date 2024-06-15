@@ -5,7 +5,7 @@
  ***************************************************************/
 
 // Config language
-define('_LANG_', 'eng');
+define('_LANG_', 'fr');
 
 // Python version in use
 define('_PYTHON_', 'python');

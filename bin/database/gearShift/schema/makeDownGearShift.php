@@ -10,8 +10,7 @@ trait makeDownGearShift{
      */
     public function dropUsersAccountColumn()
     {
-        return $this->dropTable('usersaccount', function ($table) {
-            $table->dropColumn('ip');
+        return $this->dropTable('users', function ($table) {
             $table->db(1);
         });
     }                     

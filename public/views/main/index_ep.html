@@ -1,14 +1,13 @@
 {% extends layouts %} 
 {% from forms import input_field, submit %}
 {% block content %}
-{% from message import alert_msg %}
 
     <div class="login">
         <div class="secure" align="center">
             <img src="{{ __img('secure.svg') }}" alt="">
         </div>
-        <div class="texthead"><strong>REGISTRATION</strong></div>
-        <div class="reponses {{ class }}">{{ alert_msg( reponse , alert ) }}</div>
+        <div class="texthead"><strong>AUTHENTIFICATION</strong></div>
+        <div class="reponses {{ class }}">{{ reponse ? reponse : "" }}</div>
         <form id="authentification" method="POST">
 
             {{ __csrf() }} 
@@ -17,20 +16,11 @@
                 { 
                     type : 'text' , 
                     require : true ,
-                    name : '__name__' ,
-                    placeholder : 'Name...',
+                    name : '__email__' ,
+                    placeholder : 'Email...',
                 }
             )}}
                  
-            {{ input_field(
-                {
-                    require : true ,
-                    type : 'text' , 
-                    name : '__surname__',
-                    placeholder : 'Surname...',
-                }
-            )}} 
-            
             {{ input_field(
                 {
                     require : true ,
@@ -39,22 +29,18 @@
                     placeholder : 'Phone number...',
                 }
             )}} 
-
-            {{ input_field(
-                {
-                    require : true ,
-                    type : 'email' , 
-                    name : '__email__',
-                    placeholder : 'Email...',
-                }
-            )}} 
+            
             {{ submit(
                 {
-                    label : 'Registration',
+                    label : 'Connexion',
                     icon : 'bi bi-lock'
                 }
             )}}
 
         </form>
     </div>
+    <div class="col-md-12 epaphrodite" align="center">
+        <a href="{{ __pathId('register') }}"><i class="icofont-long-arrow-right"></i> Create accompt</a>
+    </div>
+
 {% endblock %}

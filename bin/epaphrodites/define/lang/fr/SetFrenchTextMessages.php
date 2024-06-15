@@ -34,6 +34,8 @@ class SetFrenchTextMessages
                 'false-mail' => 'Désolé, ce mail est incorrect.',
                 'noformat' => 'Le format du fichier incorrecte !',
                 'succes' => 'Traitement effectué avec succès !!!',
+                'register' => 'Compte créer avec succès !!!',
+                'log' => 'Ce compte existe veuillez-vous logger !!!',
                 'login-wrong' => 'Login ou mot de passe incorrecte',
                 'user-exist' => 'Désolé, ce utilisateur existe déjà.',
                 'connexion' => 'Veuillez vous reconnecter à nouveau svp !',

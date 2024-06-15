@@ -15,9 +15,9 @@ class select extends SelectSelect
      * @return array
      */
     public function defaultSqlListeOfAllUsers(
-        int $currentPage, 
+        int $currentPage,
         int $numLines
-    ):array{
+    ): array {
 
         $result = $this->table('usersaccount')
             ->orderBy('usersgroup', 'ASC')
@@ -37,7 +37,7 @@ class select extends SelectSelect
     public function oracleListeOfAllUsers(
         int $currentPage,
         int $numLines
-    ):array{
+    ): array {
 
         $result = $this->table('usersaccount')
             ->orderBy('usersgroup', 'ASC')
@@ -45,7 +45,7 @@ class select extends SelectSelect
             ->SQuery();
 
         return static::initNamespace()['env']->dictKeyToLowers($result);
-    } 
+    }
 
     /**
      * Request to get users list (For: sqlServer)
@@ -57,7 +57,7 @@ class select extends SelectSelect
     public function sqlServerListeOfAllUsers(
         int $currentPage,
         int $numLines
-    ):array{
+    ): array {
 
         $result = $this->table('usersaccount')
             ->orderBy('usersgroup', 'ASC')
@@ -65,7 +65,7 @@ class select extends SelectSelect
             ->SQuery();
 
         return $result;
-    }    
+    }
 
     /**
      * Request to get list of users recents actions (For: mySql/sqlServer/Postgres/sqLite)
@@ -77,7 +77,7 @@ class select extends SelectSelect
     public function defaultSqlListOfRecentActions(
         int $currentPage,
         int $numLines
-    ):array{
+    ): array {
 
         $result = $this->table('history')
             ->orderBy('dates', 'ASC')
@@ -85,8 +85,8 @@ class select extends SelectSelect
             ->SQuery();
 
         return $result;
-    }  
-    
+    }
+
     /**
      * Request to get list of users recents actions (For: oracle)
      *
@@ -94,10 +94,10 @@ class select extends SelectSelect
      * @param integer $numLines
      * @return array
      */
-    public function oracleListOfRecentActions( 
+    public function oracleListOfRecentActions(
         int $currentPage,
         int $numLines
-    ):array{
+    ): array {
 
         $result = $this->table('history')
             ->orderBy('dates', 'ASC')
@@ -105,7 +105,7 @@ class select extends SelectSelect
             ->SQuery();
 
         return static::initNamespace()['env']->dictKeyToLowers($result);
-    }     
+    }
 
     /**
      * Request to get list of users recents actions (For: sqlServer)
@@ -114,10 +114,10 @@ class select extends SelectSelect
      * @param integer $numLines
      * @return array
      */
-    public function sqlServerListOfRecentActions( 
+    public function sqlServerListOfRecentActions(
         int $currentPage,
         int $numLines
-    ):array{
+    ): array {
 
         $result = $this->table('history')
             ->orderBy('dates', 'ASC')
@@ -125,5 +125,26 @@ class select extends SelectSelect
             ->SQuery();
 
         return $result;
-    }     
+    }
+
+    /**
+     * Request to select a user by her email
+     * 
+     * @param string $email
+     * @param string $phone
+     * @return bool
+     */
+    public function selectUserByEmailAndPhone(string $email, string $phone): bool
+    {
+        $result = $this->table('users')
+            ->like('email')
+            ->and(['phone'])
+            ->param([$email,$phone])
+            ->SQuery();
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

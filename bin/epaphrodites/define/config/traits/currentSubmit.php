@@ -464,6 +464,18 @@ trait currentSubmit
         return $string;
     }
 
+
+    /**
+     * Method to verify if one user exit
+     * @param string $email
+     * @param string $phone
+     * @return bool
+     */
+    public static function verifyUser(string $email,$phone): bool
+    {
+        return static::initQuery()['select']->selectUserByEmailAndPhone($email,$phone);
+    }
+
     /**
      * @return void
      */

@@ -3,7 +3,6 @@
 namespace Epaphrodites\database\gearShift\schema;
 
 trait makeUpGearShift{
-
     /**
      * Create table useraccount
      * create 25/01/2024 23:07:14
@@ -11,7 +10,7 @@ trait makeUpGearShift{
     public function createUsersAccountTable()
     {
         return $this->createTable('usersaccount', function ($table) {
-                $table->addColumn('_id', 'INTEGER', ['PRIMARY KEY', 'AUTOINCREMENT']);
+                $table->addColumn('_id', 'INTEGER', ['PRIMARY KEY', 'AUTO_INCREMENT']);
                 $table->addColumn('login', 'TEXT' , ['NOT NULL']);
                 $table->addColumn('password', 'TEXT' , ['NOT NULL']);
                 $table->addColumn('namesurname', 'TEXT' , ['DEFAULT NULL']);
@@ -23,7 +22,7 @@ trait makeUpGearShift{
                 $table->addIndex('login');
                 $table->db(1);
         });
-    }    
+    }
     /**
     * Create table users
     * create 12/06/2024 23:46:45
@@ -32,11 +31,11 @@ trait makeUpGearShift{
     {
         return $this->createTable('users', function ($table) {
 
-               $table->addColumn('_id', 'INTEGER', ['PRIMARY KEY']);
+               $table->addColumn('_id', 'INTEGER', ['PRIMARY KEY','AUTO_INCREMENT']);
                $table->addColumn('Firstname', 'VARCHAR(100)', ['NOT NULL']);
                $table->addColumn('Surname', 'VARCHAR(100)', ['NOT NULL']);
                $table->addColumn('phone', 'VARCHAR(100)', ['NOT NULL']);
-               $table->addColumn('email', 'TEXT', ['NOT NULL']);
+               $table->addColumn('email', 'VARCHAR(100)', ['NOT NULL']);
                $table->db(1);
         });
     }     

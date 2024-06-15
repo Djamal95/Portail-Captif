@@ -3,10 +3,12 @@
 namespace Epaphrodites\database\requests\typeRequest\sqlRequest\insert;
 
 use Epaphrodites\database\requests\typeRequest\noSqlRequest\insert\insert as InsertInsert;
+use Epaphrodites\epaphrodites\define\config\traits\currentSubmit;
 
 class insert extends InsertInsert
 {
 
+    use currentSubmit;
     /**
      * Add users to the system from the console
      *
@@ -65,22 +67,30 @@ class insert extends InsertInsert
             return false;
         }
     }
+
     /**
      * Request to insert datas
      * @param string $Firstname
      * @param string $Surname
      * @param string $phone
      * @param string $email
-     * @return bool
+     * @return bool|string
      */
-    public function registerUser(string $Firstname, string $Surname, string $phone,string $email)
+    public function registerUser(string $Firstname, string $Surname, string $phone, string $email)
     {
-        $result = $this->table('users')
-            ->insert('Firstname, Surname, phone, email')
-            ->values('?, ?, ?, ?')
-            ->param([$Firstname, $Surname, $phone, $email])
-            ->sdb(1)
-            ->IQuery();
-        return $result;
+        if (!empty($Firstname) && !empty($Surname) && !empty($phone) && !empty($email)) {
+            if (static::verifyUser($email, $phone)) {
+                return static::initNamespace()['msg']->answers('log');
+            } else {
+                $this->table('users')
+                    ->insert('Firstname, Surname, phone, email')
+                    ->values('?, ?, ?, ?')
+                    ->param([$Firstname, $Surname, $phone, $email])
+                    ->IQuery();
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 }
