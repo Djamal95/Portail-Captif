@@ -22,7 +22,8 @@
   "autoload": {
     "psr-4": {
       "Epaphrodites\\": "bin/",
-      "Database\\Epaphrodites\\": "bin/database/"
+      "Database\\Epaphrodites\\": "bin/database/",
+      "ErrorExceptions\\" : "bin/epaphrodites/ErrorsExceptions"
 
     }
   },

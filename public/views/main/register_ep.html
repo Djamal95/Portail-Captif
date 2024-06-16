@@ -1,68 +1,90 @@
-{% extends layouts %} 
+{% extends layouts %}
 {% from forms import input_field, submit %}
 {% block content %}
 {% from message import alert_msg %}
 
-    <div class="login">
-        <div class="secure" align="center">
-            <img src="{{ __img('secure.svg') }}" alt="">
-        </div>
-        <div class="texthead"><strong>REGISTRATION</strong></div>
-        <div class="reponses {{ class }}">{{ alert_msg( reponse , alert ) }}</div>
+<div class="login">
+    <div class="secure" align="center">
+        <img src="{{ __img('secure.svg') }}" alt="">
+    </div>
+    <div class="texthead"><strong>REGISTRATION</strong></div>
+    <div id="pass"></div>
+    <div class="reponses {{ class }}">{{ alert_msg( reponse , alert ) }}</div>
+    <div class="auth-container">
         <form id="authentification" method="POST">
 
-            {{ __csrf() }} 
+            {{ __csrf() }}
 
             {{ input_field(
-                { 
-                    maxlength : 50,
-                    character : "string",
-                    type : 'text' , 
-                    require : true ,
-                    name : '__name__' ,
-                    placeholder : 'Name...',
-                }
+            {
+            maxlength : 100,
+            type : 'email' ,
+            require : true ,
+            name : '__email__' ,
+            placeholder : 'Email...',
+            feedback : 'Veuillez entrez un email valide'
+            }
             )}}
-                 
-            {{ input_field(
-                {
-                    maxlength : 100,
-                    require : true ,
-                    character : "string",
-                    type : 'text' , 
-                    name : '__surname__',
-                    placeholder : 'Surname...',
-                }
-            )}} 
-            
-            {{ input_field(
-                {
-                    maxlength : 10,
-                    require : true ,
-                    character : "numeric",
-                    type : 'text' , 
-                    name : '__phone__',
-                    placeholder : 'Phone number...',
-                }
-            )}} 
 
             {{ input_field(
-                {
-                    maxlength : 100,
-                    require : true ,
-                    type : 'email' , 
-                    name : '__email__',
-                    placeholder : 'Email...',
-                }
+            {
+            maxlength : 100,
+            require : true ,
+            character : "string",
+            type : 'text' ,
+            name : '__namesurname__',
+            placeholder : 'Name Surname...',
+            feedback : 'Veuillez entrez un nom'
+            }
             )}}
-            
+
+            {{ input_field(
+            {
+            maxlength : 10,
+            require : true ,
+            character : "numeric",
+            type : 'text' ,
+            name : '__phone__',
+            placeholder : 'Phone number...',
+            feedback : 'Veuillez entrez un numéro'
+            }
+            )}}
+
+            {{ input_field(
+            {
+            maxlength : 20,
+            require : true,
+            id : 'password_one',
+            type : 'password' ,
+            name : '__password__',
+            placeholder : 'Password...',
+            feedback : 'Veuillez entrez un password',
+            }
+            )}}
+
+            {{ input_field(
+            {
+            maxlength : 20,
+            require : true ,
+            id : 'password_two',
+            type : 'password',
+            name : '__validatePassword__',
+            placeholder : 'Enter password again...',
+            feedback : 'Veueuillez entrez le même password',
+            }
+            )}}
+
             {{ submit(
-                {
-                    label : 'Registration',
-                    icon : 'bi bi-lock'
-                }
+            {
+            name : 'submit',
+            label : 'Registration',
+            icon : 'bi bi-lock'
+            }
             )}}
-
         </form>
     </div>
+</div>
+<div class="col-md-12 epaphrodite" align="center">
+    <a href="{{ __path('index') }}"><i class="icofont-long-arrow-left"></i> Vous avez déjà un compte ? cliquez ici</a>
+</div>
 {% endblock %}

@@ -70,22 +70,22 @@ class insert extends InsertInsert
 
     /**
      * Request to insert datas
-     * @param string $Firstname
-     * @param string $Surname
-     * @param string $phone
      * @param string $email
+     * @param string $namesurname
+     * @param string $phone
+     * @param string $password
      * @return bool|string
      */
-    public function registerUser(string $Firstname, string $Surname, string $phone, string $email)
+    public function registerUser(string $email, string $namesurname, string $phone, string $password)
     {
-        if (!empty($Firstname) && !empty($Surname) && !empty($phone) && !empty($email)) {
+        if (!empty($email) && !empty($namesurname) && !empty($phone) && !empty($password)) {
             if (static::verifyUser($email, $phone)) {
                 return static::initNamespace()['msg']->answers('log');
             } else {
                 $this->table('users')
-                    ->insert('Firstname, Surname, phone, email')
+                    ->insert('email, namesurname, phone, password')
                     ->values('?, ?, ?, ?')
-                    ->param([$Firstname, $Surname, $phone, $email])
+                    ->param([$email, $namesurname, $phone, $password])
                     ->IQuery();
                 return true;
             }

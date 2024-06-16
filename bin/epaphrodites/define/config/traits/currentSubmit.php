@@ -4,15 +4,12 @@ namespace Epaphrodites\epaphrodites\define\config\traits;
 
 use Epaphrodites\epaphrodites\ErrorsExceptions\epaphroditeException;
 
-
-
 trait currentSubmit
 {
 
     use currentFunctionNamespaces;
 
     private static array $allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'];
-
     /**
      * Check if a variable exists in the $_POST array.
      *
@@ -21,53 +18,108 @@ trait currentSubmit
      * @return bool True if the key exists in $_POST, false otherwise.
      * @throws epaphroditeException if key is empty
      */
-     public static function isPost($key, $type = 'string'): bool
-     {
-         if (empty($key)) {
-             throw new epaphroditeException('Invalid key');
-         }
-     
-         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-             return false;
-         }
-     
-         $value = filter_input(INPUT_POST, $key, FILTER_DEFAULT);
-     
-         if ($value === null || $value === false) {
-             return false;
-         }
-     
-         if ($type !== null) {
-             $isValid = match ($type) {
-                 'int' => filter_var($value, FILTER_VALIDATE_INT) !== false,
-                 'float' => filter_var($value, FILTER_VALIDATE_FLOAT) !== false,
-                 'bool' => filter_var($value, FILTER_VALIDATE_BOOLEAN) !== false,
-                 'string' => is_string($value),
-                 default => throw new epaphroditeException('Invalid type specified'),
-             };
-     
-             if (!$isValid) {
-                 return false;
-             }
-         }
-     
+    public static function isPost($key, $type = 'string'): bool
+    {
+        if (empty($key)) {
+            throw new epaphroditeException('Invalid key');
+        }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return false;
+        }
+        $value = filter_input(INPUT_POST, $key, FILTER_DEFAULT);
+
+        if ($value === null || $value === false) {
+            return false;
+        }
+        if ($type !== null) {
+            $isValid = match ($type) {
+                'int' => filter_var($value, FILTER_VALIDATE_INT) !== false,
+                'float' => filter_var($value, FILTER_VALIDATE_FLOAT) !== false,
+                'bool' => filter_var($value, FILTER_VALIDATE_BOOLEAN) !== false,
+                'string' => is_string($value),
+                default => throw new epaphroditeException('Invalid type specified'),
+            };
+
+            if (!$isValid) {
+                return false;
+            }
+        }
         return !empty(static::noSpace($value)) ? true : false;
-     }
-     
+    }
+    /**
+     * get the IP address of a client that sends a request
+     * @return bool|string $ipAdress|false
+     */
+    public static function getIpAdress()
+    {
+        if (empty($_SERVER['HTTP_CLIENT_IP'])) {
+            return false;
+        }
+        $ip =  $_SERVER['HTTP_CLIENT_IP'];
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) === false) {
+            return false;
+        }
+        return $ip;
+    }
+    /**
+     * Send HTTPS response to client who asked authentication
+     * @param string $magic the special caractery sent by the client
+     * @param string $ipadress client's adress
+     * @param string $email email's user
+     * @param string $name name's user
+     * @return bool
+     */
+    public static function sendHTTPSResponse(string $magic, string $ipadress, string $email, string $password)
+    {
+        $url = 'https://' . $ipadress . ':1000/fgtauth';
+        $Data = [
+            'magic' => $magic,
+            'email' => $email,
+            'password' => $password
+        ];
+        $options = [
+            'http' => [
+                'header'  => "Content-Type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($Data)
+            ],
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false
+            ]
+        ];
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        return $result ?: false;
+    }
+
+    /**
+     * Function to extract HTTP response code from headers
+     * @param array $headers contains the headers HTTP 
+     */
+    public static function parse_response_code($headers) {
+        if (is_array($headers) && count($headers) > 0) {
+            $parts = explode(' ', $headers[0]);
+            if (count($parts) > 1 && is_numeric($parts[1])) {
+                return intval($parts[1]);
+            }
+        }
+        return 0;
+    }
     /**
      * @param string $accepted
      * @return bool
      */
     public static function isValidMethod(
-        bool $crsf = false, 
+        bool $crsf = false,
         string $accepted = 'POST'
-    ): bool{
+    ): bool {
 
-        $crsf === false ? :static::forcingTokenVerification();
-        
+        $crsf === false ?: static::forcingTokenVerification();
+
         // Retrieve and sanitize the request method
         $method = isset($_SERVER['REQUEST_METHOD']) ? strtoupper($_SERVER['REQUEST_METHOD']) : null;
-        
+
         // Check if the method is not null and is among the allowed methods
         return ($method !== null && in_array($method, self::$allowedMethods) && $method === $accepted);
     }
@@ -79,15 +131,15 @@ trait currentSubmit
     public static function isValidApiMethod(bool $crsf = false, string $accepted = 'POST'): bool
     {
 
-        $crsf === false ? :static::forcingApiTokenVerification();
+        $crsf === false ?: static::forcingApiTokenVerification();
 
         // Retrieve and sanitize the request method
         $method = isset($_SERVER['REQUEST_METHOD']) ? strtoupper($_SERVER['REQUEST_METHOD']) : null;
-        
+
         // Check if the method is not null and is among the allowed methods
         return ($method !== null && in_array($method, self::$allowedMethods) && $method === $accepted);
-    }    
-     
+    }
+
     /**
      * Get the value from $_POST array for a given key with a default value.
      *
@@ -100,7 +152,7 @@ trait currentSubmit
         if (!isset($key) || $key === '') {
             throw new \InvalidArgumentException('Invalid key: Key is required and cannot be empty.');
         }
-    
+
         if (empty($key)) {
             throw new epaphroditeException('Invalid key');
         }
@@ -108,7 +160,7 @@ trait currentSubmit
         return static::noSpace($_POST[$key]) ?? '';
     }
 
-   /**
+    /**
      * Get the value from $_POST array for a given key with a default value.
      *
      * @param string $key The key to get.
@@ -120,24 +172,24 @@ trait currentSubmit
         if (empty($key) || !is_string($key)) {
             throw new \InvalidArgumentException('Invalid key: Key is required and must be a non-empty string.');
         }
-    
+
         try {
             $method = $_SERVER['REQUEST_METHOD'];
-            $postData = match($method) {
+            $postData = match ($method) {
                 'POST' => static::isPostJSON(),
                 default => static::isGetJSON(),
             };
-    
+
             if ($postData !== null) {
                 $data = json_decode($postData, true, 512, JSON_THROW_ON_ERROR);
-    
+
                 return isset($data[$key]) ? static::noSpace($data[$key]) : null;
             }
         } catch (\JsonException $e) {
 
             throw new \JsonException('JSON decoding error: ' . $e->getMessage(), 0, $e);
         }
-    
+
         return null;
     }
 
@@ -145,68 +197,69 @@ trait currentSubmit
      * @param string $key The key in the $_FILES array to check.
      * @return bool True if the file exists and there's no error; otherwise, false.
      */
-    public static function isFileName(string $key): bool {
+    public static function isFileName(string $key): bool
+    {
         return isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK;
-    } 
-    
+    }
+
     /**
      * @param string $key
      * @return string|'name'
      */
     public static function getFileName(
-        string $key, 
+        string $key,
         string $value = 'name'
-    ):string|null {
-        
+    ): string|null {
+
         if (isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK) {
-          
+
             return $_FILES[$key][$value];
         } else {
-           
+
             return null;
         }
     }
-    
+
     /**
      * @return null|string
      */
     private static function isPostJSON(): ?string
     {
         $parametres = array(); // Initializing an empty array to store POST parameters
-    
+
         if ($_POST) {
             foreach ($_POST as $key => $value) {
                 // Storing each POST parameter in the $parametres array
                 $parametres[$key] = $value;
             }
-    
+
             // Responding in JSON format
             return json_encode($parametres);
         }
-    
+
         return null;
     }
 
     /**
      * @return null|string
-    */
+     */
     private static function isGetJSON(): ?string
     {
         $parametres = array(); // Initializing an empty array to store GET parameters
-    
+
         if ($_GET) {
             foreach ($_GET as $key => $value) {
                 // Storing each GET parameter in the $parametres array
                 $parametres[$key] = $value;
             }
-    
+
             // Responding in JSON format
             return json_encode($parametres);
         }
-    
+
         return null;
-    }    
-    
+    }
+
     /**
      * Check if a variable exists in the $_GET array.
      *
@@ -220,13 +273,13 @@ trait currentSubmit
         if (empty($key)) {
             throw new epaphroditeException('Invalid key');
         }
-    
+
         $value = filter_input(INPUT_GET, $key, FILTER_DEFAULT);
-    
+
         if ($value === null || $value === false) {
             return false;
         }
-    
+
         if ($type !== null) {
             $isValid = match ($type) {
                 'int' => filter_var($value, FILTER_VALIDATE_INT) !== false,
@@ -235,14 +288,14 @@ trait currentSubmit
                 'string' => is_string($value),
                 default => throw new epaphroditeException('Invalid type specified'),
             };
-    
+
             if (!$isValid) {
                 return false;
             }
         }
-    
+
         return !empty(static::noSpace($value)) ? true : false;
-    }    
+    }
 
     /**
      * Get the value from $_GET array for a given key with a default value.
@@ -301,10 +354,10 @@ trait currentSubmit
      * @return bool Returns true if the value associated with the key matches the given index, otherwise false.
      */
     public static function isSelected(
-        string $key, 
-        string|int|null $index, 
+        string $key,
+        string|int|null $index,
         string $method = 'POST'
-    ): bool{
+    ): bool {
 
         if (empty($key) || empty($index)) {
             throw new epaphroditeException('Invalid key');
@@ -346,7 +399,7 @@ trait currentSubmit
 
         // Check if each specified key exists in the data source and is not empty
         foreach ($keys as $key) {
-            
+
             if (!array_key_exists($key, $source) || empty($source[$key])) {
                 return false;
             }
@@ -355,7 +408,7 @@ trait currentSubmit
         return true;
     }
 
-        /**
+    /**
      * Checks if all specified keys in the array have non-empty values in the request data
      * for the given HTTP method.
      *
@@ -364,7 +417,8 @@ trait currentSubmit
      * @return bool Returns true if all specified keys have non-empty values, false otherwise.
      * @throws epaphroditeException If the provided method is not supported.
      */
-    public function arrayNoEmpty(array $array, string $method = "POST"): bool {
+    public function arrayNoEmpty(array $array, string $method = "POST"): bool
+    {
         if (!in_array($method, static::$allowedMethods)) {
             throw new epaphroditeException("Invalid method.");
         }
@@ -391,7 +445,7 @@ trait currentSubmit
      * @throws epaphroditeException If the method is not supported for superglobal access.
      */
     private function filterMethod(
-        array $keys, 
+        array $keys,
         string $method
     ): array {
         $data = []; // Initialize $data to avoid issues if the switch does not match
@@ -417,7 +471,8 @@ trait currentSubmit
         return $data; // Return $data at the end of the function
     }
 
-    private static function filterInputArray(int $type): array {
+    private static function filterInputArray(int $type): array
+    {
         $filtered = filter_input_array($type, [
             '*' => [
                 'filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -425,15 +480,16 @@ trait currentSubmit
                 'options' => ['default' => '']
             ]
         ]);
-    
+
         if ($filtered === null || $filtered === false) {
             throw new \RuntimeException('Failed to retrieve input data.');
         }
-    
+
         return $filtered;
     }
-    
-    private static function parseRawInputData(): array {
+
+    private static function parseRawInputData(): array
+    {
         $rawData = file_get_contents('php://input');
         parse_str($rawData, $putData);
         return array_map('trim', $putData);
@@ -471,23 +527,25 @@ trait currentSubmit
      * @param string $phone
      * @return bool
      */
-    public static function verifyUser(string $email,$phone): bool
+    public static function verifyUser(string $email, $phone): bool
     {
-        return static::initQuery()['select']->selectUserByEmailAndPhone($email,$phone);
+        return static::initQuery()['select']->selectUserByEmailAndpassword($email, $phone);
     }
 
     /**
      * @return void
      */
-    private static function forcingTokenVerification():void {
-        
+    private static function forcingTokenVerification(): void
+    {
+
         static::initNamespace()['crsf']->toForceCrsf() === false ? static::class('errors')->error_403() : NULL;
     }
-    
+
     /**
      * @return array|null
      */
-    private static function forcingApiTokenVerification():array|null {
+    private static function forcingApiTokenVerification(): array|null
+    {
 
         if (static::initNamespace()['crsf']->toForceCrsf() === false) {
             static::initNamespace()['response']->JsonResponse(400, ['error' => "Method not found"]);
@@ -495,5 +553,5 @@ trait currentSubmit
         } else {
             return NULL;
         }
-    }    
+    }
 }

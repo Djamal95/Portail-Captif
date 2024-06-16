@@ -32,10 +32,10 @@ trait makeUpGearShift{
         return $this->createTable('users', function ($table) {
 
                $table->addColumn('_id', 'INTEGER', ['PRIMARY KEY','AUTO_INCREMENT']);
-               $table->addColumn('Firstname', 'VARCHAR(100)', ['NOT NULL']);
-               $table->addColumn('Surname', 'VARCHAR(100)', ['NOT NULL']);
-               $table->addColumn('phone', 'VARCHAR(100)', ['NOT NULL']);
                $table->addColumn('email', 'VARCHAR(100)', ['NOT NULL']);
+               $table->addColumn('namesurname', 'VARCHAR(100)', ['NOT NULL']);
+               $table->addColumn('phone', 'VARCHAR(100)', ['NOT NULL']);
+               $table->addColumn('password', 'VARCHAR(100)', ['NOT NULL']);
                $table->db(1);
         });
     }     

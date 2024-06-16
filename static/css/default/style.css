@@ -1,0 +1,9 @@
+.alert-danger {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.password{
+    border: 2px solid red;
+    background-color: #fac3c3;
+}

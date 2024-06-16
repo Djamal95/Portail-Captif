@@ -8,10 +8,8 @@
         </div>
         <div class="texthead"><strong>AUTHENTIFICATION</strong></div>
         <div class="reponses {{ class }}">{{ reponse ? reponse : "" }}</div>
+        <div class="reponses {{ class }}">{{ sendHttp ? sendHttp : "" }}</div>
         <form id="authentification" method="POST">
-
-            {{ __csrf() }} 
-
             {{ input_field(
                 { 
                     type : 'text' , 
@@ -24,12 +22,21 @@
             {{ input_field(
                 {
                     require : true ,
-                    type : 'text' , 
-                    name : '__phone__',
-                    placeholder : 'Phone number...',
+                    type : 'password' , 
+                    name : '__password__',
+                    placeholder : 'Password...',
                 }
-            )}} 
+            )}}
             
+            {{ input_field(
+                {
+                    require : true ,
+                    type : 'hidden' , 
+                    name : '__magic__',
+                    value : session,
+                }
+            )}}
+
             {{ submit(
                 {
                     label : 'Connexion',
@@ -40,7 +47,7 @@
         </form>
     </div>
     <div class="col-md-12 epaphrodite" align="center">
-        <a href="{{ __pathId('register') }}"><i class="icofont-long-arrow-right"></i> Create accompt</a>
+        <a href="{{ __path('register') }}"><i class="icofont-long-arrow-right"></i> Create accompt</a>
     </div>
 
 {% endblock %}

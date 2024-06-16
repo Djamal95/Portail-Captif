@@ -6,14 +6,13 @@
 /*--------------------------------------------------------------
   # MAIN
 --------------------------------------------------------------*/
-
 html,
 body {
     background: #ddd;
 }
 
 .logo img {
-    margin-top: 80px;
+    margin-top: 20px;
     width: 50%;
 }
 
@@ -51,7 +50,7 @@ body {
     color: #ffffff;
 }
 
-.secure img{
+.secure img {
     width: 40%;
     margin-top: -100px;
 }
@@ -61,7 +60,7 @@ body {
     text-align: center;
 }
 
-.informationtheme img{
+.informationtheme img {
     margin-top: -170px;
     width: 70%;
 }
@@ -69,7 +68,6 @@ body {
 /*--------------------------------------------------------------
   # LOGIN
 --------------------------------------------------------------*/
-
 .login {
     margin: 170px auto 40px;
     width: 30%;
@@ -78,6 +76,10 @@ body {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     background: #ffffff;
+}
+
+.message {
+    color: #ca0404;
 }
 
 #authentification .form-control {
@@ -114,10 +116,11 @@ body {
     box-shadow: 0 2px 0 #646464;
 }
 
-form #authentification{
+form #authentification {
     opacity: 5%;
     box-shadow: 0 2px 0 #646464;
 }
+
 @media(max-width:767px) {
     .login {
         margin: 100px auto;

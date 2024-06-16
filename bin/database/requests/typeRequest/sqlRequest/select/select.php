@@ -131,20 +131,16 @@ class select extends SelectSelect
      * Request to select a user by her email
      * 
      * @param string $email
-     * @param string $phone
-     * @return bool
+     * @param string $password
+     * @return bool|array
      */
-    public function selectUserByEmailAndPhone(string $email, string $phone): bool
+    public function selectUserByEmailAndpassword(string $email, string $password)
     {
         $result = $this->table('users')
             ->like('email')
-            ->and(['phone'])
-            ->param([$email,$phone])
+            ->or(['password'])
+            ->param([$email, $password])
             ->SQuery();
-        if ($result) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($result) ? $result : false;
     }
 }
